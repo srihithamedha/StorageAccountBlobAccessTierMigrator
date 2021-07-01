@@ -10,15 +10,16 @@ namespace StorageAccountBlobAccessTierMigrator
 {
     public class BlobAccessTierMigrator
     {
-        public CloudStorageAccount StorageAccount { get; set; }
+        private readonly CloudStorageAccount storageAccount;
+
         public BlobAccessTierMigrator(string connectionString)
         {
-            this.StorageAccount = CloudStorageAccount.Parse(connectionString);
+            this.storageAccount = CloudStorageAccount.Parse(connectionString);
         }
 
         public BlobAccessTierMigrator(string accountName, string key)
         {
-            this.StorageAccount = CloudStorageAccount.Parse(
+            this.storageAccount = CloudStorageAccount.Parse(
                 string.Concat(
                     "DefaultEndpointsProtocol=https;AccountName=",
                     accountName,
@@ -27,9 +28,9 @@ namespace StorageAccountBlobAccessTierMigrator
                 );
         }
 
-        public async Task ChangeAccessTier(StandardBlobTier blobTier)
+        public async Task ChangeAccessTierForAllContainers(StandardBlobTier blobTier)
         {
-            var blobContainers = await this.StorageAccount.CreateCloudBlobClient().ListBlobContainers();
+            var blobContainers = await this.storageAccount.CreateCloudBlobClient().ListBlobContainers();
             blobContainers.ToList().ForEach(container =>
             {
                 var blobs = container.ListBlobs().GetAwaiter().GetResult();
@@ -42,6 +43,5 @@ namespace StorageAccountBlobAccessTierMigrator
                 });
             });
         }
-
     }
 }
