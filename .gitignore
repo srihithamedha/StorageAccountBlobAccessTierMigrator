@@ -1,0 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/src/.vs/StorageAccountBlobAccessTierMigrator/v17/.suo
+/src/StorageAccountBlobAccessTierMigrator/bin
+/src/StorageAccountBlobAccessTierMigrator/obj
